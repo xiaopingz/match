@@ -1,6 +1,7 @@
 #ifndef PERSON_INFO_H_
 #define PERSON_INFO_H_
 #include <vector>
+#include <map>
 #include <memory>
 #include <string>
 
@@ -9,6 +10,7 @@ class PersonInfo;
 typedef std::shared_ptr<PersonInfo> PersonInfoPtr;
 typedef std::vector<PersonInfoPtr> PersonGroup;
 typedef std::shared_ptr<PersonGroup> PersonGroupPtr;
+typedef std::map<PersonInfoPtr,PersonGroupPtr>	MapGB;	//存放女性候选人信息（给女性投票过的男性）
 typedef std::pair<PersonInfoPtr, PersonInfoPtr> BGPair; //<Boy, Girl>
 typedef std::vector<BGPair>	 BGPairs;
 typedef std::shared_ptr<BGPairs>	BGPairsPtr;

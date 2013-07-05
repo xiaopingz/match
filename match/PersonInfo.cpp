@@ -104,7 +104,7 @@ PersonInfoPtr	PersonInfo::generateOnePerson(int id, int gender)
 	l	=	rand()%100 + 1;
 	c	=	rand()%100 + 1;
 	rw	=	rand()%98  + 1;	//生成1~98的随机数
-	rl	=	rand()%98  + 1;
+	rl	=	rand()%(99-rw) + 1;
 	rc	=	100 - rw - rl;
 	PersonInfoPtr	pPerson	=	std::make_shared<PersonInfo>(id,w,l,c,rw,rl,rc,gender);
 	return	pPerson;
