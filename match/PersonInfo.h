@@ -17,7 +17,7 @@ typedef std::shared_ptr<BGPairs>	BGPairsPtr;
 class PersonInfo
 {
 public:
-	PersonInfo(int uid, int iwealth, int ilook, int icharactor, int rwealth, int rlook, int rcharactor);
+	PersonInfo(int uid, int iwealth, int ilook, int icharactor, int rwealth, int rlook, int rcharactor, int igender);
 	
 	int		sumOfInfo();
 	int		getSatDegree(PersonInfoPtr p);
@@ -40,5 +40,6 @@ protected:
 	int m_ratio_wealth;
 	int m_ratio_look;
 	int m_ratio_charactor;	//对配偶三项指标的期望百分比，三者和为100，各自取值1~98
+	int m_gender;			//1:male; 0:female
 };//end class PersonInfo;
 #endif
