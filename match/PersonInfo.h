@@ -26,8 +26,8 @@ public:
 	
 	
 	static PersonGroupPtr  readFromFile(const std::string & file);
-	static PersonGroupPtr	generateRandomPersons(int num);
-	static PersonInfoPtr	generateOnePerson();
+	static PersonGroupPtr	generateRandomPersons(int num, int gender);
+	static PersonInfoPtr	generateOnePerson(int id, int gender);
 	
 	static void			showPairs(BGPairsPtr ps);
 	static void			dumpPairsToFile(BGPairsPtr ps, const std::string & file);
