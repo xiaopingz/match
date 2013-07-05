@@ -4,7 +4,7 @@
 BGPairsPtr	MDriver::makeAllPairs(PersonGroupPtr boys, PersonGroupPtr girls)
 {
 	BGPairsPtr	pBGPairs	=	std::make_shared<BGPairs>();
-	while( !boys && !girls )
+	while( boys->size() && girls->size() )
 	{
 		BGPair	onePair	=	makeOnePair(boys,girls);	//	一次配对
 		pBGPairs->push_back(onePair);					//将结果放入BGPairs当中
@@ -13,6 +13,7 @@ BGPairsPtr	MDriver::makeAllPairs(PersonGroupPtr boys, PersonGroupPtr girls)
 		it	=	std::find(girls->begin(),girls->end(),onePair.second);		//查找已配对的女性的位置
 		girls->erase(it);		//	删除该女性信息
 	}
+	return	pBGPairs;
 }
 	
 BGPair		MDriver::makeOnePair(PersonGroupPtr boys, PersonGroupPtr girls)
@@ -20,6 +21,13 @@ BGPair		MDriver::makeOnePair(PersonGroupPtr boys, PersonGroupPtr girls)
 	std::shared_ptr<MapGB>	pMapGB	=	std::make_shared<MapGB>();
 	PersonGroup::size_type	ixMax	=	0, ixTmp;
 	MapGB::iterator itMap, itMax;
+
+	for( ixTmp=0;ixTmp!=(*girls).size();++ixTmp )
+	{
+		PersonGroupPtr	pPG	=	std::make_shared<PersonGroup>();
+		PersonInfoPtr	pGirl	=	(*girls)[ixTmp];
+		(*pMapGB)[pGirl]	=	pPG;
+	}
 	for( PersonGroup::iterator itBoys = boys->begin(); itBoys!=boys->end(); ++itBoys )
 	{
 		//遍历男性，给女士投票

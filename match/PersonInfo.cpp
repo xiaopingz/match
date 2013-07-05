@@ -1,7 +1,5 @@
 #include "PersonInfo.h"
 #include<fstream>
-#include<stdlib.h>	//srand,rand
-#include<time.h>
 #include<iostream>
 
 PersonInfo::PersonInfo(int uid, int iwealth, int ilook, int icharactor, int rwealth, int rlook, int rcharactor, int igender)
@@ -17,6 +15,11 @@ int		PersonInfo::sumOfInfo()
 int		PersonInfo::getSatDegree(PersonInfoPtr p)
 {
 	return m_info_charactor * p->m_ratio_charactor + m_info_look * p->m_ratio_look + m_info_wealth * p->m_ratio_wealth;
+}
+
+int		PersonInfo::getPersonGenger()
+{
+	return	m_gender;
 }
 
 PersonInfoPtr 	PersonInfo::selectTheBestOne(PersonGroupPtr group)
@@ -78,6 +81,8 @@ PersonGroupPtr  PersonInfo::readFromFile(const std::string & file)
 		else
 			fRead>>id>>t>>w>>t>>l>>t>>c>>t>>rw>>t>>rl>>t>>rc;
 
+		if(fRead.bad()||fRead.fail())
+			continue;
 		PersonInfoPtr	pPerson	=	std::make_shared<PersonInfo>(id,w,l,c,rw,rl,rc,gender);
 		pPersonGroup->push_back(pPerson);
 	}
@@ -99,7 +104,6 @@ PersonGroupPtr	PersonInfo::generateRandomPersons(int num,int gender)
 PersonInfoPtr	PersonInfo::generateOnePerson(int id, int gender)
 {
 	int w, l, c, rw, rl, rc;
-	srand(time(NULL));
 	w	=	rand()%100 + 1;	//生成1~100的随机数
 	l	=	rand()%100 + 1;
 	c	=	rand()%100 + 1;

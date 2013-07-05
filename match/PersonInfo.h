@@ -23,11 +23,12 @@ public:
 	
 	int		sumOfInfo();
 	int		getSatDegree(PersonInfoPtr p);
+	int		getPersonGenger();
 	
 	PersonInfoPtr 	selectTheBestOne(PersonGroupPtr group);
 	
 	
-	static PersonGroupPtr  readFromFile(const std::string & file);
+	static PersonGroupPtr	readFromFile(const std::string & file);
 	static PersonGroupPtr	generateRandomPersons(int num, int gender);
 	static PersonInfoPtr	generateOnePerson(int id, int gender);
 	
