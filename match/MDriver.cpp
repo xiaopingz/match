@@ -1,5 +1,6 @@
 #include "MDriver.h"
 #include<algorithm>	//std::find
+#include<iostream>
 
 BGPairsPtr	MDriver::makeAllPairs(PersonGroupPtr boys, PersonGroupPtr girls)
 {
@@ -36,15 +37,38 @@ BGPair		MDriver::makeOnePair(PersonGroupPtr boys, PersonGroupPtr girls)
 	}
 	for( itMap = pMapGB->begin(); itMap!=pMapGB->end();++itMap )
 	{
+		int iSumOfBest=0, iSumNow=0, iIdOfBest=100, iIdNow=100;
+		iSumNow		=	(itMap->first)->sumOfInfo();
+		iIdNow		=	(itMap->first)->getUsrid();
 		//选出票数最多的女性
 		ixTmp	=	(itMap->second)->size();
-		if( ixTmp>ixMax )
+		if( ixTmp>ixMax || (ixTmp==0 && ixMax==0) )
 		{
 			ixMax	=	ixTmp;
 			itMax	=	itMap;
+			iSumOfBest	=	iSumNow;
+			iIdOfBest	=	iIdNow;
+		}
+		else if( ixTmp==ixMax )
+		{
+			if( iSumNow>iSumOfBest )
+			{
+				itMax	=	itMap;
+				iSumOfBest	=	iSumNow;
+				iIdOfBest	=	iIdNow;
+			}
+			else if( iSumNow==iSumOfBest )
+			{
+				if( iIdNow<iIdOfBest )
+				{
+					itMax	=	itMap;
+					iIdOfBest	=	iIdNow;
+				}
+			}
 		}
 	}
 	PersonInfoPtr	girlMatched	=	itMax->first;
 	PersonInfoPtr	boyMatched	=	girlMatched->selectTheBestOne(itMax->second);	//配对成功
+	//std::cout<<boyMatched->getUsrid()<<" & "<<girlMatched->getUsrid()<<std::endl;
 	return std::make_pair(boyMatched,girlMatched);
 }

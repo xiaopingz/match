@@ -14,12 +14,20 @@ int		PersonInfo::sumOfInfo()
 
 int		PersonInfo::getSatDegree(PersonInfoPtr p)
 {
-	return m_info_charactor * p->m_ratio_charactor + m_info_look * p->m_ratio_look + m_info_wealth * p->m_ratio_wealth;
+	int	sd	=	m_info_charactor * p->m_ratio_charactor + m_info_look * p->m_ratio_look + m_info_wealth * p->m_ratio_wealth;
+		//std::cout<<m_userID<<"->"<<p->m_userID<<" :"<<sd<<std::endl;
+
+	return sd;
 }
 
 int		PersonInfo::getPersonGenger()
 {
 	return	m_gender;
+}
+
+int		PersonInfo::getUsrid()
+{
+	return m_userID;
 }
 
 PersonInfoPtr 	PersonInfo::selectTheBestOne(PersonGroupPtr group)
@@ -57,6 +65,7 @@ PersonInfoPtr 	PersonInfo::selectTheBestOne(PersonGroupPtr group)
 			}
 		}
 	}
+	//std::cout<<m_userID<<" choose:"<<(*itBest)->m_userID<<std::endl;
 	return *itBest;
 }
 

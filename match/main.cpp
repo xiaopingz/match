@@ -8,8 +8,10 @@ void main()
 	srand(time(NULL));
 	PersonGroupPtr pPGPlayer,pPGMale,pPGFemale;
 	pPGPlayer	=	PersonInfo::readFromFile("../players.txt");
-	pPGMale		=	PersonInfo::/*generateRandomPersons(100,1)*/readFromFile("../male.txt");
-	pPGFemale	=	PersonInfo::/*generateRandomPersons(100,0)*/readFromFile("../female.txt");
+	//pPGMale		=	PersonInfo::generateRandomPersons(5,1);
+	pPGMale		=	PersonInfo::readFromFile("../male.txt");
+	//pPGFemale	=	PersonInfo::generateRandomPersons(5,0);
+	pPGFemale	=	PersonInfo::readFromFile("../female.txt");
 	PersonInfoPtr	pPlayer	=	(*pPGPlayer)[0];
 	if(pPlayer->getPersonGenger()==1)
 	{

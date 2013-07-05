@@ -24,6 +24,7 @@ public:
 	int		sumOfInfo();
 	int		getSatDegree(PersonInfoPtr p);
 	int		getPersonGenger();
+	int		getUsrid();
 	
 	PersonInfoPtr 	selectTheBestOne(PersonGroupPtr group);
 	
