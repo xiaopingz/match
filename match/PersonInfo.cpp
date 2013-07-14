@@ -72,7 +72,13 @@ PersonInfoPtr 	PersonInfo::selectTheBestOne(PersonGroupPtr group)
 PersonGroupPtr  PersonInfo::readFromFile(const std::string & file)
 {
 	PersonGroupPtr	pPersonGroup	=	std::make_shared<PersonGroup>();
-	std::ifstream	fRead(file);
+	std::ifstream	fRead;
+	fRead.open(file);
+	if( !fRead.good() )
+	{
+		std::cout<<"Open file:"<<file<<" failed!"<<std::endl;
+		return NULL;
+	}
 	int gender,id = 0 ,w,l,c,rw,rl,rc;
 	char t;		//	¶ÁÈ¡·ûºÅ','
 
@@ -121,6 +127,19 @@ PersonInfoPtr	PersonInfo::generateOnePerson(int id, int gender)
 	rc	=	100 - rw - rl;
 	PersonInfoPtr	pPerson	=	std::make_shared<PersonInfo>(id,w,l,c,rw,rl,rc,gender);
 	return	pPerson;
+}
+
+PersonInfoPtr	PersonInfo::inputOnePerson()
+{
+	PersonInfoPtr pPerson;
+	int w, l, c, rw, rl, rc,gender;
+	std::cout<<"Please int the person's information (7 numbers):"<<std::endl;
+	std::cin>>w>>l>>c>>rw>>rl>>rc>>gender;
+	if( w<100 && l<100 && c<100 && rw<99 && rl<99 && rc<98 && rw+rl+rc==100 && gender==1 || gender==0 )
+		pPerson =	std::make_shared<PersonInfo>(-1,w,l,c,rw,rl,rc,gender);
+	else
+		pPerson	=	NULL;
+	return pPerson;
 }
 
 void			PersonInfo::showPairs(BGPairsPtr ps)

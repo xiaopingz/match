@@ -22,16 +22,17 @@ public:
 	PersonInfo(int uid, int iwealth, int ilook, int icharactor, int rwealth, int rlook, int rcharactor, int igender);
 	
 	int		sumOfInfo();
-	int		getSatDegree(PersonInfoPtr p);
+	int		getSatDegree(PersonInfoPtr p);		//计算一个人对另一个人的满意度
 	int		getPersonGenger();
 	int		getUsrid();
 	
-	PersonInfoPtr 	selectTheBestOne(PersonGroupPtr group);
+	PersonInfoPtr 	selectTheBestOne(PersonGroupPtr group);	//选择另一性别组中最满意的人
 	
 	
-	static PersonGroupPtr	readFromFile(const std::string & file);
-	static PersonGroupPtr	generateRandomPersons(int num, int gender);
+	static PersonGroupPtr	readFromFile(const std::string & file);	//从文件中读取用户信息
+	static PersonGroupPtr	generateRandomPersons(int num, int gender);	//产生随机信息的用户，num为需产生的个数，gender为性别
 	static PersonInfoPtr	generateOnePerson(int id, int gender);
+	static PersonInfoPtr	inputOnePerson();
 	
 	static void			showPairs(BGPairsPtr ps);
 	static void			dumpPairsToFile(BGPairsPtr ps, const std::string & file);
