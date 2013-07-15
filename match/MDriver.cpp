@@ -37,7 +37,7 @@ BGPair		MDriver::makeOnePair(PersonGroupPtr boys, PersonGroupPtr girls)
 	}
 	for( itMap = pMapGB->begin(); itMap!=pMapGB->end();++itMap )
 	{
-		int iSumOfBest=0, iSumNow=0, iIdOfBest=100, iIdNow=100;
+		int iSumOfBest=0, iSumNow=0, iIdOfBest=200, iIdNow=200;
 		iSumNow		=	(itMap->first)->sumOfInfo();
 		iIdNow		=	(itMap->first)->getUsrid();
 		//选出票数最多的女性
@@ -69,6 +69,9 @@ BGPair		MDriver::makeOnePair(PersonGroupPtr boys, PersonGroupPtr girls)
 	}
 	PersonInfoPtr	girlMatched	=	itMax->first;
 	PersonInfoPtr	boyMatched	=	girlMatched->selectTheBestOne(itMax->second);	//配对成功
-	//std::cout<<boyMatched->getUsrid()<<" & "<<girlMatched->getUsrid()<<std::endl;
+	if( boyMatched->getUsrid()==-1 )
+	{
+		std::cout<<boyMatched->getUsrid()<<" & "<<girlMatched->getUsrid()<<std::endl;
+	}
 	return std::make_pair(boyMatched,girlMatched);
 }

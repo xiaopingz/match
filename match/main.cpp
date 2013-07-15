@@ -29,8 +29,17 @@ void main()
 				std::cout<<"You input of the personInfo is illigal!"<<std::endl;
 				continue;
 			}
-			pPGMale		=	PersonInfo::generateRandomPersons(100,1);
-			pPGFemale	=	PersonInfo::generateRandomPersons(100,0);
+			if(pPlayer->getPersonGenger()==1)
+			{
+				pPGMale		=	PersonInfo::generateRandomPersons(99,1);
+				pPGFemale	=	PersonInfo::generateRandomPersons(100,0);
+			}
+			else
+			{
+				pPGMale		=	PersonInfo::generateRandomPersons(100,1);
+				pPGFemale	=	PersonInfo::generateRandomPersons(99,0);
+			}
+			
 		}
 		else if( input==2 )
 		{
@@ -43,6 +52,14 @@ void main()
 			std::cout<<"Please choose the number of the player(1~100):"<<std::endl;
 			std::cin>>iNum;
 			pPlayer		=	(*pPGPlayer)[iNum-1];
+			if(pPlayer->getPersonGenger()==1)
+			{
+				pPGMale->push_back(pPlayer);
+			}
+			else
+			{
+				pPGFemale->push_back(pPlayer);
+			}
 		}
 		else if( input==0 )
 			break;
@@ -50,16 +67,6 @@ void main()
 		{
 			std::cout<<"Illigal input! Please choose again!"<<std::endl;
 			continue;
-		}
-		if(pPlayer->getPersonGenger()==1)
-		{
-			pPGMale->pop_back();
-			pPGMale->push_back(pPlayer);
-		}
-		else
-		{
-			pPGFemale->pop_back();
-			pPGFemale->push_back(pPlayer);
 		}
 
 		BGPairsPtr pPairs	=	MDriver::makeAllPairs(pPGMale,pPGFemale);

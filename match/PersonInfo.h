@@ -19,6 +19,7 @@ typedef std::shared_ptr<BGPairs>	BGPairsPtr;
 class PersonInfo
 {
 public:
+	PersonInfo();
 	PersonInfo(int uid, int iwealth, int ilook, int icharactor, int rwealth, int rlook, int rcharactor, int igender);
 	
 	int		sumOfInfo();

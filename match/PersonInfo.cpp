@@ -2,6 +2,11 @@
 #include<fstream>
 #include<iostream>
 
+PersonInfo::PersonInfo()
+	:m_userID(-2),m_info_wealth(0),m_info_look(0),m_info_charactor(0),m_ratio_wealth(0),m_ratio_look(0),m_ratio_charactor(0),m_gender(0)
+{
+}
+
 PersonInfo::PersonInfo(int uid, int iwealth, int ilook, int icharactor, int rwealth, int rlook, int rcharactor, int igender)
 	:m_userID(uid),m_info_wealth(iwealth),m_info_look(ilook),m_info_charactor(icharactor),m_ratio_wealth(rwealth),m_ratio_look(rlook),m_ratio_charactor(rcharactor),m_gender(igender)
 {
@@ -14,8 +19,11 @@ int		PersonInfo::sumOfInfo()
 
 int		PersonInfo::getSatDegree(PersonInfoPtr p)
 {
-	int	sd	=	m_info_charactor * p->m_ratio_charactor + m_info_look * p->m_ratio_look + m_info_wealth * p->m_ratio_wealth;
-		//std::cout<<m_userID<<"->"<<p->m_userID<<" :"<<sd<<std::endl;
+	int	sd	=	m_ratio_charactor * p->m_info_charactor + m_ratio_look * p->m_info_look + m_ratio_wealth * p->m_info_wealth;
+	if( m_userID==-1 )
+	{
+		std::cout<<m_userID<<"->"<<p->m_userID<<" :"<<sd<<std::endl;
+	}
 
 	return sd;
 }
@@ -32,9 +40,9 @@ int		PersonInfo::getUsrid()
 
 PersonInfoPtr 	PersonInfo::selectTheBestOne(PersonGroupPtr group)
 {
-	int highestDegree=0, tmpDegree;
+	int highestDegree=0, tmpDegree=0;
 	std::vector<PersonInfoPtr>::iterator itBest;
-	int iSumOfBest, iSumNow, iIdOfBest, iIdNow;
+	int iSumOfBest=0, iSumNow=0, iIdOfBest=200, iIdNow=200;
 	for( std::vector<PersonInfoPtr>::iterator it = group->begin(); it!=group->end(); ++it )
 	{
 		tmpDegree	=	getSatDegree(*it);
@@ -65,7 +73,10 @@ PersonInfoPtr 	PersonInfo::selectTheBestOne(PersonGroupPtr group)
 			}
 		}
 	}
-	//std::cout<<m_userID<<" choose:"<<(*itBest)->m_userID<<std::endl;
+	if( m_userID==-1 )
+	{	
+		std::cout<<m_userID<<" choose:"<<(*itBest)->m_userID<<std::endl;
+	}
 	return *itBest;
 }
 
@@ -162,7 +173,7 @@ void			PersonInfo::dumpPairsToFile(BGPairsPtr ps, const std::string & file)
 	{
 		PersonInfoPtr pBoy	=	(*itPair).first;
 		PersonInfoPtr pGirl	=	(*itPair).second;
-		fWrite<<"M:"<<pBoy->m_userID<<" INFO:"<<pBoy->m_info_wealth<<","<<pBoy->m_info_look<<","<<pBoy->m_info_charactor<<","<<pBoy->m_ratio_wealth<<","<<pBoy->m_ratio_look<<","<<pBoy->m_ratio_charactor;
+		fWrite<<"M:"<<pBoy->m_userID<<" INFO:"<<pBoy->m_info_wealth<<","<<pBoy->m_info_look<<","<<pBoy->m_info_charactor<<","<<pBoy->m_ratio_wealth<<","<<pBoy->m_ratio_look<<","<<pBoy->m_ratio_charactor<<"<--->";
 		fWrite<<" F:"<<pGirl->m_userID<<" INFO:"<<pGirl->m_info_wealth<<","<<pGirl->m_info_look<<","<<pGirl->m_info_charactor<<","<<pGirl->m_ratio_wealth<<","<<pGirl->m_ratio_look<<","<<pGirl->m_ratio_charactor<<std::endl;
 	}
 	fWrite.close();
