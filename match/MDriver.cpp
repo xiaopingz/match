@@ -20,10 +20,9 @@ BGPairsPtr	MDriver::makeAllPairs(PersonGroupPtr boys, PersonGroupPtr girls)
 BGPair		MDriver::makeOnePair(PersonGroupPtr boys, PersonGroupPtr girls)
 {
 	std::shared_ptr<MapGB>	pMapGB	=	std::make_shared<MapGB>();
-	PersonGroup::size_type	ixMax	=	0, ixTmp;
-	MapGB::iterator itMap, itMax;
+	PersonInfoPtr	girlMatched, boyMatched;
 
-	for( ixTmp=0;ixTmp!=(*girls).size();++ixTmp )
+	for( PersonGroup::size_type ixTmp=0;ixTmp!=(*girls).size();++ixTmp )
 	{
 		PersonGroupPtr	pPG	=	std::make_shared<PersonGroup>();
 		PersonInfoPtr	pGirl	=	(*girls)[ixTmp];
@@ -35,43 +34,46 @@ BGPair		MDriver::makeOnePair(PersonGroupPtr boys, PersonGroupPtr girls)
 		PersonInfoPtr	girlToVote	=	(*itBoys)->selectTheBestOne(girls);
 		(*pMapGB)[girlToVote]->push_back(*itBoys);	
 	}
-	for( itMap = pMapGB->begin(); itMap!=pMapGB->end();++itMap )
+	
+	PersonGroupPtr	pPGHotGirls	=	getHotestGirl(pMapGB);
+	if ( pPGHotGirls->size()==1 )
 	{
-		int iSumOfBest=0, iSumNow=0, iIdOfBest=200, iIdNow=200;
-		iSumNow		=	(itMap->first)->sumOfInfo();
-		iIdNow		=	(itMap->first)->getUsrid();
-		//选出票数最多的女性
-		ixTmp	=	(itMap->second)->size();
-		if( ixTmp>ixMax || (ixTmp==0 && ixMax==0) )
+		 girlMatched	=	*(pPGHotGirls->begin());
+	}
+	else
+	{
+		PersonGroupPtr	pPGMSGirls	=	PersonInfo::selectMaxSum(pPGHotGirls);
+		if ( pPGMSGirls->size()==1 )
 		{
-			ixMax	=	ixTmp;
-			itMax	=	itMap;
-			iSumOfBest	=	iSumNow;
-			iIdOfBest	=	iIdNow;
+			girlMatched	=	*(pPGMSGirls->begin());
 		}
-		else if( ixTmp==ixMax )
+		else
 		{
-			if( iSumNow>iSumOfBest )
-			{
-				itMax	=	itMap;
-				iSumOfBest	=	iSumNow;
-				iIdOfBest	=	iIdNow;
-			}
-			else if( iSumNow==iSumOfBest )
-			{
-				if( iIdNow<iIdOfBest )
-				{
-					itMax	=	itMap;
-					iIdOfBest	=	iIdNow;
-				}
-			}
+			girlMatched	=	PersonInfo::selectMinId(pPGMSGirls);
 		}
 	}
-	PersonInfoPtr	girlMatched	=	itMax->first;
-	PersonInfoPtr	boyMatched	=	girlMatched->selectTheBestOne(itMax->second);	//配对成功
-	if( boyMatched->getUsrid()==-1 )
-	{
-		std::cout<<boyMatched->getUsrid()<<" & "<<girlMatched->getUsrid()<<std::endl;
-	}
+	boyMatched	=	girlMatched->selectTheBestOne((*pMapGB)[girlMatched]);	//配对成功
 	return std::make_pair(boyMatched,girlMatched);
+}
+
+PersonGroupPtr		MDriver::getHotestGirl(std::shared_ptr<MapGB>	pMapGB)
+{
+	PersonGroupPtr	pPGHotGirls	=	std::make_shared<PersonGroup>();
+	MapGB::iterator	it, itBest;
+	PersonGroup::size_type	ixMax	=	0, ixTmp;
+
+	for ( it=pMapGB->begin();it!=pMapGB->end();++it )
+	{
+		ixTmp	=	(it->second)->size();
+		if ( ixTmp>ixMax || ixMax==ixTmp )
+		{
+			if ( ixTmp>ixMax )
+			{
+				ixMax	=	ixTmp;
+				pPGHotGirls->clear();
+			}
+			pPGHotGirls->push_back(it->first);
+		}
+	}
+	return	pPGHotGirls;
 }

@@ -70,6 +70,7 @@ void main()
 		}
 
 		BGPairsPtr pPairs	=	MDriver::makeAllPairs(pPGMale,pPGFemale);
+		PersonInfo::showPairs(pPairs);	//	显示主角的配对情况
 		PersonInfo::dumpPairsToFile(pPairs,"../matched.txt");
 		std::cout<<"Please check the matched pairs in the file \"../matched.txt\"!"<<std::endl;
 	}

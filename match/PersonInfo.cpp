@@ -20,11 +20,6 @@ int		PersonInfo::sumOfInfo()
 int		PersonInfo::getSatDegree(PersonInfoPtr p)
 {
 	int	sd	=	m_ratio_charactor * p->m_info_charactor + m_ratio_look * p->m_info_look + m_ratio_wealth * p->m_info_wealth;
-	if( m_userID==-1 )
-	{
-		std::cout<<m_userID<<"->"<<p->m_userID<<" :"<<sd<<std::endl;
-	}
-
 	return sd;
 }
 
@@ -40,42 +35,82 @@ int		PersonInfo::getUsrid()
 
 PersonInfoPtr 	PersonInfo::selectTheBestOne(PersonGroupPtr group)
 {
-	int highestDegree=0, tmpDegree=0;
-	std::vector<PersonInfoPtr>::iterator itBest;
-	int iSumOfBest=0, iSumNow=0, iIdOfBest=200, iIdNow=200;
-	for( std::vector<PersonInfoPtr>::iterator it = group->begin(); it!=group->end(); ++it )
+	PersonGroupPtr pPGMaxSatDegree	=	selectMaxSatDegree(group);
+	if( pPGMaxSatDegree->size()==1 )
 	{
-		tmpDegree	=	getSatDegree(*it);
-		iSumNow		=	(*it)->sumOfInfo();
-		iIdNow		=	(*it)->m_userID;
-		if(tmpDegree>highestDegree)
+		return	*(pPGMaxSatDegree->begin());
+	}
+	else
+	{
+		PersonGroupPtr	pPGMaxSum	=	selectMaxSum(pPGMaxSatDegree);
+		if ( pPGMaxSum->size()==1 )
 		{
-			highestDegree	=	tmpDegree;
-			itBest	=	it;
-			iSumOfBest	=	iSumNow;
-			iIdOfBest	=	iIdNow;
+			return	*(pPGMaxSum->begin());
 		}
-		if(tmpDegree==highestDegree)
-		{	//如果满意度相同，则找出自身各项指标和最大的一个
-			if( (*it)->sumOfInfo()>iSumOfBest )
-			{
-				itBest	=	it;
-				iSumOfBest	=	iSumNow;
-				iIdOfBest	=	iIdNow;
-			}
-			if( (*it)->sumOfInfo()==iSumOfBest )
-			{	//如果和也一样，则选择id最小的一个
-				if( (*it)->m_userID<iIdOfBest )
-				{
-					itBest	=	it;
-					iIdOfBest	=	iIdNow;
-				}
-			}
+		else
+		{
+			return	selectMinId(pPGMaxSum);
 		}
 	}
-	if( m_userID==-1 )
-	{	
-		std::cout<<m_userID<<" choose:"<<(*itBest)->m_userID<<std::endl;
+}
+
+PersonGroupPtr	PersonInfo::selectMaxSatDegree(PersonGroupPtr group)
+{
+	PersonGroup::iterator	itNow,itMax;
+	PersonGroupPtr	pPGMSD	=	std::make_shared<PersonGroup>();
+	int highestDegree=0, tmpDegree=0;
+
+	for ( itNow=group->begin();itNow!=group->end();++itNow )
+	{
+		tmpDegree	=	getSatDegree(*itNow);
+		if ( tmpDegree>highestDegree || tmpDegree==highestDegree )
+		{
+			if ( tmpDegree>highestDegree )
+			{
+				highestDegree	=	tmpDegree;
+				pPGMSD->clear();
+			}
+			pPGMSD->push_back(*itNow);
+		}
+	}
+	return	pPGMSD;
+}
+
+PersonGroupPtr	PersonInfo::selectMaxSum(PersonGroupPtr group)
+{
+	PersonGroup::iterator	itNow,itMax;
+	PersonGroupPtr	pPGMS	=	std::make_shared<PersonGroup>();
+	int iSumNow=0, iSumMax=0;
+
+	for ( itNow=group->begin();itNow!=group->end();++itNow )
+	{
+		iSumNow	=	(*itNow)->sumOfInfo();
+		if ( iSumNow>iSumMax || iSumNow==iSumMax )
+		{
+			if ( iSumNow>iSumMax )
+			{
+				iSumMax	=	iSumNow;
+				pPGMS->clear();
+			}
+			pPGMS->push_back(*itNow);
+		}
+	}
+	return	pPGMS;
+}
+
+PersonInfoPtr	PersonInfo::selectMinId(PersonGroupPtr group)
+{
+	PersonGroup::iterator	itNow, itBest;
+	int	iIdBest=200, iIdNow=200;
+
+	for ( itNow=group->begin();itNow!=group->end();++itNow )
+	{
+		iIdNow	=	(*itNow)->getUsrid();
+		if ( iIdNow<iIdBest )
+		{
+			iIdBest	=	iIdNow;
+			itBest	=	itNow;
+		}
 	}
 	return *itBest;
 }
@@ -160,8 +195,11 @@ void			PersonInfo::showPairs(BGPairsPtr ps)
 	{
 		PersonInfoPtr pBoy	=	(*itPair).first;
 		PersonInfoPtr pGirl	=	(*itPair).second;
-		std::cout<<"M:"<<pBoy->m_userID<<" INFO:"<<pBoy->m_info_wealth<<","<<pBoy->m_info_look<<","<<pBoy->m_info_charactor<<","<<pBoy->m_ratio_wealth<<","<<pBoy->m_ratio_look<<","<<pBoy->m_ratio_charactor;
-		std::cout<<" F:"<<pGirl->m_userID<<" INFO:"<<pGirl->m_info_wealth<<","<<pGirl->m_info_look<<","<<pGirl->m_info_charactor<<","<<pGirl->m_ratio_wealth<<","<<pGirl->m_ratio_look<<","<<pGirl->m_ratio_charactor<<std::endl;
+		if ( pGirl->getUsrid()==-1 || pBoy->getUsrid()==-1 )
+		{	//此处加了if条件判断，则只显示主角的配对情况。
+			std::cout<<"M:"<<pBoy->m_userID<<" INFO:"<<pBoy->m_info_wealth<<","<<pBoy->m_info_look<<","<<pBoy->m_info_charactor<<","<<pBoy->m_ratio_wealth<<","<<pBoy->m_ratio_look<<","<<pBoy->m_ratio_charactor<<"<--->";
+			std::cout<<" F:"<<pGirl->m_userID<<" INFO:"<<pGirl->m_info_wealth<<","<<pGirl->m_info_look<<","<<pGirl->m_info_charactor<<","<<pGirl->m_ratio_wealth<<","<<pGirl->m_ratio_look<<","<<pGirl->m_ratio_charactor<<std::endl;
+		}
 	}
 }
 

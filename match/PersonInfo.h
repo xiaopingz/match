@@ -28,6 +28,9 @@ public:
 	int		getUsrid();
 	
 	PersonInfoPtr 	selectTheBestOne(PersonGroupPtr group);	//选择另一性别组中最满意的人
+	PersonGroupPtr	selectMaxSatDegree(PersonGroupPtr group);
+	static	PersonGroupPtr	selectMaxSum(PersonGroupPtr group);
+	static	PersonInfoPtr	selectMinId(PersonGroupPtr group);
 	
 	
 	static PersonGroupPtr	readFromFile(const std::string & file);	//从文件中读取用户信息
